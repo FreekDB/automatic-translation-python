@@ -22,13 +22,13 @@ class AutomaticTranslation(Resource):
             translate_client = translate_v2.Client()
             translations_by_language = translate_client.translate(translate_request.sourceTexts, target_language)
 
-            for source_result in translations_by_language:
-                source_text = source_result['input']
-                detected_source_languages[source_text] = source_result['detectedSourceLanguage']
+            for translation_by_language in translations_by_language:
+                source_text = translation_by_language['input']
+                detected_source_languages[source_text] = translation_by_language['detectedSourceLanguage']
                 if source_text not in translations:
                     translations[source_text] = {}
                 translations_for_source = translations.get(source_text)
-                translations_for_source[target_language] = source_result['translatedText']
+                translations_for_source[target_language] = translation_by_language['translatedText']
 
         data = []
 
