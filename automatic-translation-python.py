@@ -14,27 +14,21 @@ class AutomaticTranslation(Resource):
     def get():
         request_data = request.get_json()
         translate_request = namedtuple('TranslateRequest', request_data.keys())(*request_data.values())
-        print(translate_request)
 
         detected_source_languages = {}
         translations = {}
 
         for target_language in translate_request.targetLanguages:
             translate_client = translate_v2.Client()
-            result = translate_client.translate(translate_request.sourceTexts, target_language=target_language)
-            print(result)
+            translations_by_language = translate_client.translate(translate_request.sourceTexts, target_language)
 
-            for source_result in result:
+            for source_result in translations_by_language:
                 source_text = source_result['input']
                 detected_source_languages[source_text] = source_result['detectedSourceLanguage']
                 if source_text not in translations:
                     translations[source_text] = {}
                 translations_for_source = translations.get(source_text)
-                print(translations_for_source)
                 translations_for_source[target_language] = source_result['translatedText']
-
-        print(detected_source_languages)
-        print(translations)
 
         data = []
 

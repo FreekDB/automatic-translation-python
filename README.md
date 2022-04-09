@@ -36,7 +36,7 @@ Response:
             "sourceText": "In the second line less translation is needed.",
             "detectedSourceLanguage": "en",
             "translations": {
-                "en": "In the second line less translation is needed."
+                "en": "In the second line less translation is needed.",
                 "hu": "A második sorban kevesebb fordításra van szükség."
             }
         },
@@ -44,7 +44,7 @@ Response:
             "sourceText": "Die dritte Zeile enthält andere Wörter.",
             "detectedSourceLanguage": "de",
             "translations": {
-                "en": "The third line contains other words."
+                "en": "The third line contains other words.",
                 "hu": "A harmadik sor más szavakat tartalmaz."
             }
         }
