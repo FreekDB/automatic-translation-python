@@ -1,8 +1,10 @@
+from typing import List
+
 from flask import Flask, request
 from flask_restful import Api, Resource
 
-# export GOOGLE_APPLICATION_CREDENTIALS='Test Google Cloud Translation-5cd266aa0073.json'
 from google.cloud import translate_v2
+from google.cloud.translate_v2.client import Client
 
 
 flaskApp = Flask(__name__)
@@ -21,9 +23,15 @@ class AutomaticTranslation(Resource):
         return translate_response, 200
 
 
+class TranslateRequest:
+    def __init__(self, source_texts: List[str], target_languages: List[str]):
+        self.source_texts = source_texts
+        self.target_languages = target_languages
+
+
 class TranslationEndpoint:
     @staticmethod
-    def handle_translate_request(translate_request, translate_client):
+    def handle_translate_request(translate_request: TranslateRequest, translate_client: Client):
         detected_source_languages = {}
         translations = {}
 
@@ -50,12 +58,6 @@ class TranslationEndpoint:
             )
 
         return {'data': data}
-
-
-class TranslateRequest:
-    def __init__(self, source_texts, target_languages):
-        self.source_texts = source_texts
-        self.target_languages = target_languages
 
 
 api.add_resource(AutomaticTranslation, '/translate')
