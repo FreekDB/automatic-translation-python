@@ -5,8 +5,7 @@ from google.cloud import translate_v2
 from google.cloud.translate_v2.client import Client
 
 from data_classes import TranslateRequest
-from translator import GoogleTranslator
-
+from translator import GoogleTranslator, LanguageCleaner
 
 flaskApp = Flask(__name__)
 api = Api(flaskApp)
@@ -28,7 +27,8 @@ class TranslationEndpoint:
     @staticmethod
     def handle_translate_request(translate_request: TranslateRequest, translate_client: Client):
         translator = GoogleTranslator(translate_client)
-        data = translator.translate_texts(translate_request.source_texts, translate_request.target_languages)
+        target_languages = LanguageCleaner().clean(translate_request.target_languages, translator)
+        data = translator.translate_texts(translate_request.source_texts, target_languages)
 
         return {'data': data.to_json()}
 

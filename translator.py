@@ -98,3 +98,40 @@ class GoogleTranslator(Translator):
                                                 translations[source_text], ""))
 
         return TranslateResponse(data)
+
+
+class LanguageCleaner:
+    def strip_dialects(self, language: str) -> str:
+        exception_languages = ['zh-cn', 'zh-tw']
+
+        if language in exception_languages:
+            return language
+        else:
+            return language.split('-')[0]
+
+    def find_highest_supported_language(self, language_range: str, translator: Translator) -> str:
+        languages = language_range.lower().split(",")
+
+        clean_languages = []
+        for language in languages:
+            clean_language_split = language.split('=')
+            clean_language = translator.process_language_exception(clean_language_split[0])
+            clean_language = self.strip_dialects(clean_language)
+            if translator.is_language_supported(clean_language):
+                clean_languages.append(clean_language)
+
+        if len(clean_languages) > 0:
+            return clean_languages[0]
+        else:
+            return "en"
+
+    def clean(self, target_language_ranges: List[str], translator: Translator) -> List[str]:
+        languages = [self.find_highest_supported_language(language_range, translator)
+                     for language_range in target_language_ranges]
+
+        distinct_languages = []
+        for language in languages:
+            if language not in distinct_languages:
+                distinct_languages.append(language)
+
+        return distinct_languages
