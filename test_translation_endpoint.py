@@ -1,6 +1,6 @@
 import unittest
 
-from automatictranslationpython import TranslationEndpoint, TranslateRequest
+from automatic_translation_python import TranslationEndpoint, TranslateRequest
 
 
 class TestTranslationEndpoint(unittest.TestCase):
